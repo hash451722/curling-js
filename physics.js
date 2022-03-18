@@ -122,7 +122,7 @@ export class Engine {
         this.resetHistory();
         this.stones.push(stone);
         this.nShot++;
-        this.simulateShot(1000);
+        this.simulateShot(500);
         this.rank();
         this.countScore();
 
@@ -165,18 +165,38 @@ export class Engine {
     step() {
         let dt = this.dt;
         this.stones.forEach(stone => {
+
+            if (stone.velocity.length() < EPS32) {
+                return;
+            }
+
             let aUnit = stone.velocity.clone().normalized().inverse();
             let a = aUnit.mul(this.friction*G);
-            stone.position = stone.position.add( stone.velocity.mul(dt) );
-            stone.velocity = stone.velocity.add( a.mul(dt) );
+
+            let v = stone.velocity = stone.velocity.add( a.mul(dt) );
+
+            if (this.sameDirection(v, a)) {
+                console.log("stop");
+                console.log(v);
+                stone.velocity = new Vector(0, 0);
+            } else {
+                stone.position = stone.position.add( stone.velocity.mul(dt) );
+                stone.velocity = v.clone();
+            }
             stone.velocity.console();
-        });        
+        });    
     }
-    sameDirection(vec1, vev2) {
+    sameDirection(vec1, vec2) {
+        let vec1Unit = vec1.normalized();
+        let vec2Unit = vec2.normalized();
+        let inner = vec1Unit.dot(vec2Unit);
 
+        if (Math.abs(1-inner) < EPS32) {
+            return true;            
+        } else {
+            return false;
+        }
     }
-
-
 
     // Stop the stone when it touches the wall. (Set velocity to zero.)
     touchWall() {

@@ -35,7 +35,8 @@ export class Vector {
     clone = function() {
         return new Vector(this.x, this.y);
     }
-    console = function() {
-        console.log("x=", this.x, ", y=",this.y);
+    console = function(s) {
+        s = s || "Vector";
+        console.log(s, ": x=", this.x, ", y=",this.y);
     }
 }

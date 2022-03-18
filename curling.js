@@ -84,18 +84,21 @@ function animate(engine, displayElement, btnShot, svgStones) {
   console.log("animation frame rate:", 1/intervalTime*1000, "fps");
 
   let itr = 0;
-  console.log(engine.itr);
+  console.log(engine.itr, intervalStep);
+    let maxItr = Math.round( engine.itr/intervalStep );
+
   let intervalID = setInterval(() => {
     engine.stones.forEach(stone => {
+      let n = itr * intervalStep;
       let id = stone.id;
-      let xx = stone.posisionHistory[itr].x;
-      let yy = stone.posisionHistory[itr].y;
-      let aa = stone.angleHistory[itr];
-      svgStones[id].setAttribute("transform", `translate(${xx*SCALE}, ${yy*SCALE}) rotate(${aa})`);
+      let x = stone.posisionHistory[n].x;
+      let y = stone.posisionHistory[n].y;
+      let a = stone.angleHistory[n];
+      svgStones[id].setAttribute("transform", `translate(${x*SCALE}, ${y*SCALE}) rotate(${a})`);
     }); 
     console.log(itr);
     itr++;
-    if (itr > engine.itr) {
+    if (itr > maxItr) {
       enableBtn(btnShot)
       clearInterval(intervalID);
     }
