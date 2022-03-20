@@ -75,28 +75,39 @@ function initSvgStone(displayElement) {
 
 function animate(engine, displayElement, btnShot, svgStones) {
   const SCALE = 10.0;
-  // console.log(engine);
 
   const fps = 50;
   let intervalStep = Math.floor( 1/(fps*engine.dt) );
   let intervalTime = engine.dt*1000*intervalStep;  // [msec]
-
+  let maxItr = Math.round( engine.itr/intervalStep );
+  
   console.log("animation frame rate:", 1/intervalTime*1000, "fps");
-
+  console.log(engine.itr, intervalStep, maxItr);
+ 
+  engine.stones.forEach(stone => {
+    let pos = stone.posisionHistory[stone.posisionHistory.length-1];
+    let ang = stone.angleHistory[stone.angleHistory.length-1];
+    for (let k = 0; k < intervalStep; k++) {
+      stone.posisionHistory.push(pos);
+      stone.angleHistory.push(ang);
+    }
+  }); 
+  
   let itr = 0;
-  console.log(engine.itr, intervalStep);
-    let maxItr = Math.round( engine.itr/intervalStep );
-
   let intervalID = setInterval(() => {
+    console.log(itr);
     engine.stones.forEach(stone => {
       let n = itr * intervalStep;
       let id = stone.id;
       let x = stone.posisionHistory[n].x;
       let y = stone.posisionHistory[n].y;
       let a = stone.angleHistory[n];
+
+
+      y = -y + 21.945/2+6.401+1.829+1.829;
+
       svgStones[id].setAttribute("transform", `translate(${x*SCALE}, ${y*SCALE}) rotate(${a})`);
     }); 
-    console.log(itr);
     itr++;
     if (itr > maxItr) {
       enableBtn(btnShot)

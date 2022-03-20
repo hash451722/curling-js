@@ -13,7 +13,7 @@ export class Skipper {
             shot.color = stoneColor;
             shot.position = new Vector(0, 0);  //shot coordinate
             shot.angle = 0;
-            shot.velocity = 3;
+            shot.velocity = 2.38;
             shot.omega = 0;  // Rotation direction
                              // +:clockwise, -:counter-clockwise
         }

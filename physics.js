@@ -112,7 +112,7 @@ export class Engine {
     constructor(dt) {
         this.stones = [];
         this.dt = dt || 1e-3;
-        this.friction = 0.8;  // friction coefficient (stone & ice)
+        this.friction = 0.01;  // friction coefficient (stone & ice)
         this.nShot = 0;  // number of shots
         this.itr = 0;  // simulation step
     }
@@ -122,7 +122,7 @@ export class Engine {
         this.resetHistory();
         this.stones.push(stone);
         this.nShot++;
-        this.simulateShot(500);
+        this.simulateShot(14000);
         this.rank();
         this.countScore();
 
@@ -177,13 +177,12 @@ export class Engine {
 
             if (this.sameDirection(v, a)) {
                 console.log("stop");
-                console.log(v);
                 stone.velocity = new Vector(0, 0);
             } else {
                 stone.position = stone.position.add( stone.velocity.mul(dt) );
                 stone.velocity = v.clone();
             }
-            stone.velocity.console();
+            stone.velocity.console("Velocity");
         });    
     }
     sameDirection(vec1, vec2) {
